@@ -3,9 +3,13 @@
 # to upgrade instead of disabling the requirement below.
 Vagrant.require_version ">= 1.7.0"
 
-Vagrant.configure("2") do |config|
+VAGRANTFILE_API_VERSION = "2"
 
-  config.vm.box = "generic/fedora28"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box_url = "https://download.fedoraproject.org/pub/fedora/linux/releases/28/Cloud/x86_64/images/Fedora-Cloud-Base-Vagrant-28-1.1.x86_64.vagrant-libvirt.box"
+  config.vm.box = "f28-cloud-libvirt"
+  config.vm.box_download_checksum = "d60f52c9cb04bfd4c5e950410611c746641f0b5f76830a53d44a0f1a43ab3fac"
+  config.vm.box_download_checksum_type = "sha256"
 
   # Disable the new default behavior introduced in Vagrant 1.7, to
   # ensure that all Vagrant machines will use the same SSH key pair.
@@ -15,7 +19,7 @@ Vagrant.configure("2") do |config|
   # Forward traffic on the host to the development server on the guest.
   # You can change the host port that is forwarded to 5000 on the guest
   # if you have other services listening on your host's port 80.
-  config.vm.network "forwarded_port", guest: 6543, host: 6543
+  config.vm.network "forwarded_port", guest: 22, host: 2022
 
   # This is an optional plugin that, if installed, updates the host's /etc/hosts
   # file with the hostname of the guest VM. In Fedora it is packaged as
