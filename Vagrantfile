@@ -36,14 +36,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: "sudo dnf -y install python2-dnf libselinux-python"
   config.vm.provision "ansible" do |ansible|
     ansible.verbose = "v"
-    ansible.playbook = "devel/ansible/playbook.yml"
+    ansible.playbook = "playbook.yml"
   end
 
   # Create the bodhi dev box
-  config.vm.define "ChRIS-store" do |ChRIS-store|
-    ChRIS-store.vm.host_name = "ChRIS-store-devel"
+  config.vm.define "chrisstore" do |chrisstore|
+    chrisstore.vm.host_name = "ChRIS-store-devel"
 
-    bodhi.vm.provider :libvirt do |domain|
+    chrisstore.vm.provider :libvirt do |domain|
         # Season to taste
         domain.cpus = 4
         domain.cpu_mode = "host-passthrough"
