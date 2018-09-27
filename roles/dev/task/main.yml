@@ -1,0 +1,87 @@
+---
+# Add the yarn repo
+- name: Add repository
+  yum_repository:
+    name: Yarn Repository
+    description: Repo for Yarn, the dependency manager used in the webui.
+    baseurl: https://dl.yarnpkg.com/rpm/
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: https://dl.yarnpkg.com/rpm/pubkey.gpg
+
+# Install needed packages
+- name: Install dev packages
+  dnf:
+      name: "{{ item }}"
+      state: present
+      with_items:
+      - git
+      - docker
+      - docker-compose
+      - mysql
+      - mysql-server
+      - httpie
+      - python2-pip
+      - python3-pip
+      - python3-virtualenv
+      - python2-virtualenv
+      - python3-virtualenvwrapper
+      - python2-virtualenvwrapper
+      - yarn
+
+- name: pip install django-storage-swift
+  pip:
+      name: django-storage-swift
+      executable: pip3
+
+- name: pip install docker
+  pip:
+      name: docker
+      executable: pip3
+
+- name: Install the .bashrc
+  copy:
+      src: .bashrc
+      dest: /home/vagrant/.bashrc
+      mode: 0644
+      owner: vagrant
+      group: vagrant
+
+- name: Install the .vimrc
+  copy:
+      src: .vimrc
+      dest: /home/vagrant/.vimrc
+      mode: 0644
+      owner: vagrant
+      group: vagrant
+
+- name: Install the motd
+  copy:
+      src: motd
+      dest: /etc/motd
+      mode: 0644
+
+- name: Created directory for python env
+  file: path=/home/fedora/Python_Envs state=directory
+
+- name: Make python3 virtual environment
+  command: mkvirtualenv --python=python3 chris_store_env
+  chdir: /home/fedora/Python_Envs
+
+- name: Created directory for repos
+  file: path=/home/fedora/Repositories state=directory
+
+- name: Clone ChRIS Store repo
+  command: git clone https://github.com/FNNDSC/ChRIS_store.git
+  args:
+  chdir: /home/fedora/Repositories
+
+- name: Clone ChRIS Store UI repo
+  command: git clone https://github.com/FNNDSC/ChRIS_store_ui.git
+  args:
+  chdir: /home/fedora/Repositories
+
+- name: Install dependencies for UI
+  command: yarn install
+  chdir: /home/fedora/Repositories/ChRIS_store_ui
+
