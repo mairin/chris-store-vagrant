@@ -61,15 +61,21 @@
       dest: /etc/motd
       mode: 0644
 
-- name: Created directory for python env
-  file: path=/home/vagrant/Python_Envs state=directory
-
+- name: Create directory for python env
+  file: 
+      path: /home/vagrant/Python_Envs 
+      state: directory
+      mode: 0755
+      
 - name: Make python3 virtual environment
   command: mkvirtualenv --python=python3 chris_store_env
   chdir: /home/vagrant/Python_Envs
 
-- name: Created directory for repos
-  file: path=/home/vagrant/Repositories state=directory
+- name: Create directory for repos
+  file: 
+      path: /home/vagrant/Repositories 
+      state: directory
+      mode: 0755
 
 - name: Clone ChRIS Store repo
   command: git clone https://github.com/FNNDSC/ChRIS_store.git
