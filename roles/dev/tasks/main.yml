@@ -2,7 +2,7 @@
 # Add the yarn repo
 - name: Add repository
   yum_repository:
-    name: Yarn Repository
+    name: yarnrepo
     description: Repo for Yarn, the dependency manager used in the webui.
     baseurl: https://dl.yarnpkg.com/rpm/
     enabled: yes
@@ -12,9 +12,7 @@
 # Install needed packages
 - name: Install dev packages
   dnf:
-      name: "{{ item }}"
-      state: present
-      with_items:
+      name:
       - git
       - docker
       - docker-compose
@@ -28,6 +26,7 @@
       - python3-virtualenvwrapper
       - python2-virtualenvwrapper
       - yarn
+      state: present
 
 - name: pip install django-storage-swift
   pip:
@@ -66,10 +65,6 @@
       path: /home/vagrant/Python_Envs 
       state: directory
       mode: 0755
-      
-- name: Make python3 virtual environment
-  command: mkvirtualenv --python=python3 chris_store_env
-  chdir: /home/vagrant/Python_Envs
 
 - name: Create directory for repos
   file: 
@@ -78,16 +73,28 @@
       mode: 0755
 
 - name: Clone ChRIS Store repo
-  command: git clone https://github.com/FNNDSC/ChRIS_store.git
-  args:
-  chdir: /home/vagrant/Repositories
+  git:
+    repo: 'https://github.com/FNNDSC/ChRIS_store.git'
+    dest: /home/vagrant/Repositories
+    update: yes
 
 - name: Clone ChRIS Store UI repo
-  command: git clone https://github.com/FNNDSC/ChRIS_store_ui.git
-  args:
-  chdir: /home/vagrant/Repositories
+  git:
+    repo: 'https://github.com/FNNDSC/ChRIS_store_ui.git'
+    dest: /home/vagrant/Repositories
+    update: yes
 
-- name: Install dependencies for UI
+#- name: Install dependencies for UI via yarn
+#  yarn:
+#    path: /home/vagrant/Repositories/ChRIS_store_ui/node_modules
+
+- name:  Install dependencies for UI via yarn
   command: yarn install
-  chdir: /home/vagrant/Repositories/ChRIS_store_ui
+  args: 
+    chdir: /home/vagrant/Repositories/ChRIS_store_ui
 
+- name: Make python3 virtual environment
+  pip:
+    requirements: /home/vagrant/Repositories/ChRIS_store/requirements/local.txt
+    virtualenv: /home/vagrant/Python_Envs
+    virtualenv_command: /usr/bin/python -m venv

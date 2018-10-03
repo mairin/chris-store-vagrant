@@ -10,6 +10,6 @@ fi
 
 # User specific aliases and functions
 export WORKON_HOME=~/Python_Envs
-VIRTUALENVWRAPPER_PYTHON=/home/duffy/Python_Envs/chris_store_env/bin/python
-source /home/duffy/.local/bin/virtualenvwrapper.sh
+VIRTUALENVWRAPPER_PYTHON=/home/vagrant/Python_Envs/chris_store_env/bin/python
+source /usr/bin/virtualenvwrapper.sh
 
