@@ -11,5 +11,5 @@ fi
 # User specific aliases and functions
 export WORKON_HOME=~/Python_Envs
 VIRTUALENVWRAPPER_PYTHON=/home/vagrant/Python_Envs/chris_store_env/bin/python
-source /usr/bin/virtualenvwrapper.sh
+source /usr/bin/virtualenvwrapper-3.sh
 
